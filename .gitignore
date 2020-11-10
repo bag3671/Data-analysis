@@ -1,3 +1,5 @@
 01.DB/mysql.ipynb
 01.DB/TEST.db
 *.db
+samples/
+03.pandas/population_age_2020.csv
