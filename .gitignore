@@ -3,3 +3,6 @@
 *.db
 samples/
 03.pandas/population_age_2020.csv
+cafe_2year.csv
+doctor_2019.csv
+doctor2.csv
