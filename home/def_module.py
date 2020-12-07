@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
-# %matplotlib inline
-# mpl.rc('font', family='Malgun Gothic')
-# mpl.rc('axes', unicode_minus=False)
+import pandas as pd
+from fbprophet import Prophet
+from datetime import datetime
+import pandas_datareader as pdr
 
 BORDER_LINES = [[(5, 1), (5, 2), (7, 2), (7, 3), (11,3), (11, 0)],
     [(5, 4), (5, 5), (2, 5), (2, 7), (4, 7), (4, 9), (7, 9), (7, 7), (9, 7), (9, 5), (10, 5), (10, 4), (5, 4)], 
@@ -145,3 +146,21 @@ def insert_ID(a):
 
 def pivot_cafes(a):
     return a.pivot_table('도로명주소',index=['ID'],aggfunc='count')
+
+def forca(a):
+    a_trunc = a[:'2020-05-31']
+    df_a = pd.DataFrame({'ds': a_trunc.index, 'y':a_trunc.Close})
+    df_a.reset_index(inplace=True)
+    del df_a['Date']
+    m = Prophet()
+    m.fit(df_a)
+    future = m.make_future_dataframe(periods=210)
+    forecast = m.predict(future)
+    return forecast
+
+def plot_predict(a,forecast):
+    plt.figure(figsize=(12,6))
+    plt.plot(a.index, a.Close, label='real')
+    plt.plot(forecast.ds, forecast.yhat, label='forecast')
+    plt.grid()
+    plt.legend()
